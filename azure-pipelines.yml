@@ -1,0 +1,55 @@
+
+trigger:
+  - main
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+  - stage: Plan
+    displayName: Terraform Plan
+    jobs:
+      - job: TerraformPlan
+        steps:
+          - task: TerraformInstaller@1
+            displayName: Install Terraform
+            inputs:
+              terraformVersion: '1.13.3'
+
+          - script: terraform init
+            displayName: Terraform Init
+            workingDirectory: terraform
+
+          - script: terraform validate
+            displayName: Terraform Validate
+            workingDirectory: terraform
+
+          - script: terraform plan -out=tfplan
+            displayName: Terraform Plan
+            workingDirectory: terraform
+
+          - publish: terraform/tfplan
+            artifact: tfplan
+
+  - stage: Apply
+    displayName: Terraform Apply
+    dependsOn: Plan
+    condition: succeeded()
+    jobs:
+      - job: TerraformApply
+        steps:
+          - task: TerraformInstaller@1
+            displayName: Install Terraform
+            inputs:
+              terraformVersion: '1.13.3'
+
+          - download: current
+            artifact: tfplan
+
+          - script: terraform init
+            displayName: Terraform Init
+            workingDirectory: terraform
+
+          - script: terraform apply -auto-approve "$(Pipeline.Workspace)/tfplan/tfplan"
+            displayName: Terraform Apply
+            workingDirectory: terraform
