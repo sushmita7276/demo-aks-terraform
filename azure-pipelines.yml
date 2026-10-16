@@ -25,6 +25,7 @@ stages:
               scriptType: bash
               scriptLocation: inlineScript
               inlineScript: |
+                cd terraform
                 export ARM_USE_AZUREAD=true
                 terraform init
                 terraform validate
@@ -59,6 +60,7 @@ stages:
               scriptType: bash
               scriptLocation: inlineScript
               inlineScript: |
+                cd terraform
                 export ARM_USE_AZUREAD=true
                 terraform init
                 terraform apply -auto-approve "$(Pipeline.Workspace)/tfplan/tfplan"
