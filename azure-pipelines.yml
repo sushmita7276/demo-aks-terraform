@@ -30,8 +30,6 @@ stages:
                 terraform init
                 terraform validate
                 terraform plan -out=tfplan
-            
-
           - publish: '$(Build.SourcesDirectory)/terraform/tfplan'
             artifact: tfplan
             displayName: Publish Terraform Plan
@@ -64,4 +62,3 @@ stages:
                 export ARM_USE_AZUREAD=true
                 terraform init
                 terraform apply -auto-approve "$(Pipeline.Workspace)/tfplan/tfplan"
-           
