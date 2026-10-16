@@ -1,0 +1,15 @@
+
+# Terraform generated files
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
+
+# Local variables and secrets
+*.tfvars
+*.tfvars.json
+
+# Editor files
+.vscode/
