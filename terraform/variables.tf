@@ -60,3 +60,9 @@ variable "node_vm_size" {
   type        = string
   default     = "Standard_D2s_v5"
 }
+
+variable "acr_name" {
+  description = "Azure Container Registry name"
+  type        = string
+  default     = "demoaksacr"
+}
