@@ -11,25 +11,29 @@ stages:
     jobs:
       - job: TerraformPlan
         steps:
+          - checkout: self
+
           - task: TerraformInstaller@1
             displayName: Install Terraform
             inputs:
               terraformVersion: '1.13.3'
 
-          - script: terraform init
-            displayName: Terraform Init
-            workingDirectory: terraform
+          - task: AzureCLI@2
+            displayName: Terraform Init and Plan
+            inputs:
+              azureSubscription: 'demo-aks-service-connection'
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                export ARM_USE_AZUREAD=true
+                terraform init
+                terraform validate
+                terraform plan -out=tfplan
+            workingDirectory: '$(Build.SourcesDirectory)/terraform'
 
-          - script: terraform validate
-            displayName: Terraform Validate
-            workingDirectory: terraform
-
-          - script: terraform plan -out=tfplan
-            displayName: Terraform Plan
-            workingDirectory: terraform
-
-          - publish: terraform/tfplan
+          - publish: '$(Build.SourcesDirectory)/terraform/tfplan'
             artifact: tfplan
+            displayName: Publish Terraform Plan
 
   - stage: Apply
     displayName: Terraform Apply
@@ -38,6 +42,8 @@ stages:
     jobs:
       - job: TerraformApply
         steps:
+          - checkout: self
+
           - task: TerraformInstaller@1
             displayName: Install Terraform
             inputs:
@@ -46,10 +52,14 @@ stages:
           - download: current
             artifact: tfplan
 
-          - script: terraform init
-            displayName: Terraform Init
-            workingDirectory: terraform
-
-          - script: terraform apply -auto-approve "$(Pipeline.Workspace)/tfplan/tfplan"
-            displayName: Terraform Apply
-            workingDirectory: terraform
+          - task: AzureCLI@2
+            displayName: Terraform Init and Apply
+            inputs:
+              azureSubscription: 'YOUR-SERVICE-CONNECTION-NAME'
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                export ARM_USE_AZUREAD=true
+                terraform init
+                terraform apply -auto-approve "$(Pipeline.Workspace)/tfplan/tfplan"
+            workingDirectory: '$(Build.SourcesDirectory)/terraform'
