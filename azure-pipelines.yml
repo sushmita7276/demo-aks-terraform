@@ -30,7 +30,7 @@ stages:
                 terraform init
                 terraform validate
                 terraform plan -out=tfplan
-            workingDirectory: '$(Build.SourcesDirectory)/terraform'
+            
 
           - publish: '$(Build.SourcesDirectory)/terraform/tfplan'
             artifact: tfplan
@@ -56,7 +56,7 @@ stages:
           - task: AzureCLI@2
             displayName: Terraform Init and Apply
             inputs:
-              azureSubscription: 'YOUR-SERVICE-CONNECTION-NAME'
+              azureSubscription: 'demo-aks-service-connection'
               scriptType: bash
               scriptLocation: inlineScript
               inlineScript: |
@@ -64,4 +64,4 @@ stages:
                 export ARM_USE_AZUREAD=true
                 terraform init
                 terraform apply -auto-approve "$(Pipeline.Workspace)/tfplan/tfplan"
-            workingDirectory: '$(Build.SourcesDirectory)/terraform'
+           
