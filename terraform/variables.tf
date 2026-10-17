@@ -58,7 +58,7 @@ variable "node_count" {
 variable "node_vm_size" {
   description = "AKS worker node VM size"
   type        = string
-  default     = "Standard_D2s_v5"
+  default     = "Standard_D2s_v6"
 }
 
 variable "acr_name" {
