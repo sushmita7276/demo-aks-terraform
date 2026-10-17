@@ -64,5 +64,5 @@ variable "node_vm_size" {
 variable "acr_name" {
   description = "Azure Container Registry name"
   type        = string
-  default     = "demoaksacr"
+  default     = "demoaksacr2026"
 }
