@@ -67,14 +67,6 @@ variable "acr_name" {
   default     = "demoaksacr2026"
 }
 
-variable "resource_group_name" {
-  default = "rg-aks"
-}
-
-variable "location" {
-  default = "westus"
-}
-
 variable "sql_server_name" {
   default = "demoaappserver-sql-2026"
 }
