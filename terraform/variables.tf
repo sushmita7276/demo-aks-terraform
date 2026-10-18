@@ -66,3 +66,28 @@ variable "acr_name" {
   type        = string
   default     = "demoaksacr2026"
 }
+
+variable "resource_group_name" {
+  default = "rg-aks"
+}
+
+variable "location" {
+  default = "westus"
+}
+
+variable "sql_server_name" {
+  default = "demoaappserver-sql-2026"
+}
+
+variable "sql_database_name" {
+  default = "demoappdb"
+}
+
+variable "admin_username" {
+  default = "sqladminuser"
+}
+
+variable "admin_password" {
+  type      = string
+  sensitive = true
+}

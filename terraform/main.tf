@@ -40,3 +40,13 @@ module "acr" {
   location            = var.location
   resource_group_name = var.resource_group_name
 }
+module "sql" {
+  source = "./modules/sql"
+
+  resource_group_name = var.resource_group_name
+  location            = var.location
+  sql_server_name     = var.sql_server_name
+  sql_database_name   = var.sql_database_name
+  admin_username      = var.admin_username
+  admin_password      = var.admin_password
+}
