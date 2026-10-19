@@ -89,10 +89,6 @@ variable "sku_name" {
   default = "Basic"
 }
 
-variable "client_ip" {
-  type    = string
-  default = "20.253.204.46"
-}
 variable "key_vault_name" {
   description = "Globally unique Azure Key Vault name"
   type        = string

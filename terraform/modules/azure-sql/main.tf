@@ -14,8 +14,8 @@ resource "azurerm_mssql_database" "sql_database" {
   max_size_gb = 2
 }
 resource "azurerm_mssql_firewall_rule" "aks_connection" {
-  name             = "allow-aks-outbound-ip"
+  name             = "allow-azure-services"
   server_id        = azurerm_mssql_server.sql_server.id
-  start_ip_address = var.client_ip
-  end_ip_address   = var.client_ip
+  start_ip_address = "0.0.0.0"
+  end_ip_address   = "0.0.0.0"
 }

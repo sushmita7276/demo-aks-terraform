@@ -40,28 +40,12 @@ module "acr" {
   location            = var.location
   resource_group_name = var.resource_group_name
 }
-module "sql" {
-  source = "./modules/azure-sql"
-
-  sql_server_name     = var.sql_server_name
-  sql_database_name   = var.sql_database_name
-  resource_group_name = module.resource_group.name
-  location            = module.resource_group.location
-
-  sql_admin_username = var.sql_admin_username
-  sql_admin_password = var.sql_admin_password
-
-  sku_name  = var.sku_name
-  client_ip = var.client_ip
-}
-
-resource "azurerm_user_assigned_identity" "app" {
-  name                = "demo-aks-app-identity"
-  location            = module.resource_group.location
-  resource_group_name = module.resource_group.name
-}
-
 data "azurerm_client_config" "current" {}
+
+resource "random_password" "app_secret" {
+  length  = 48
+  special = true
+}
 
 module "key_vault" {
   source = "./modules/key-vault"
@@ -71,17 +55,24 @@ module "key_vault" {
   resource_group_name = module.resource_group.name
   tenant_id           = data.azurerm_client_config.current.tenant_id
 
-  secret_reader_principal_id = azurerm_user_assigned_identity.app.principal_id
+  terraform_principal_id            = data.azurerm_client_config.current.object_id
+  aks_secrets_provider_principal_id = module.aks.key_vault_secrets_provider_identity_object_id
+
+  sql_username = var.sql_admin_username
+  sql_password = var.sql_admin_password
+  app_secret   = random_password.app_secret.result
 }
 
-resource "azurerm_federated_identity_credential" "aks_workload" {
-  name                = "demo-aks-workload-federation"
+module "sql" {
+  source = "./modules/azure-sql"
+
+  sql_server_name     = var.sql_server_name
+  sql_database_name   = var.sql_database_name
   resource_group_name = module.resource_group.name
-  parent_id           = azurerm_user_assigned_identity.app.id
+  location            = module.resource_group.location
 
-  audience = ["api://AzureADTokenExchange"]
+  sql_admin_username = module.key_vault.sql_username
+  sql_admin_password = module.key_vault.sql_password
 
-  issuer = "https://westus.oic.prod-aks.azure.com/9e19c113-9fbf-4030-b93e-10fc81bd1965/be51caaf-cb06-4ef5-8d1c-13823a57a0aa/"
-
-  subject = "system:serviceaccount:default:python-app-sa"
+  sku_name = var.sku_name
 }

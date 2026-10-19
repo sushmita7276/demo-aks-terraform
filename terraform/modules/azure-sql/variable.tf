@@ -28,7 +28,3 @@ variable "sku_name" {
   default = "Basic"
 }
 
-variable "client_ip" {
-  type    = string
-  default = ""
-}

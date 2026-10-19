@@ -12,7 +12,22 @@ output "key_vault_uri" {
   description = "URI of the Key Vault"
   value       = azurerm_key_vault.kv.vault_uri
 }
-output "secrets_reader_role_assignment_id" {
-  description = "ID of the Key Vault secrets reader RBAC assignment"
-  value       = azurerm_role_assignment.secrets_reader.id
+output "access_policy_ids" {
+  description = "IDs of the Key Vault access policies"
+  value = [
+    azurerm_key_vault_access_policy.terraform.id,
+    azurerm_key_vault_access_policy.aks_secrets_provider.id
+  ]
+}
+
+output "sql_username" {
+  description = "SQL administrator username stored in Key Vault"
+  value       = azurerm_key_vault_secret.sql_username.value
+  sensitive   = true
+}
+
+output "sql_password" {
+  description = "SQL administrator password stored in Key Vault"
+  value       = azurerm_key_vault_secret.sql_password.value
+  sensitive   = true
 }
