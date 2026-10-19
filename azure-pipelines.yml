@@ -2,10 +2,6 @@
 trigger:
   - main
 
-variables:
-  - name: sql_admin_password
-    value: $(sql_admin_password)
-
 pool:
   vmImage: ubuntu-latest
 
@@ -34,6 +30,9 @@ stages:
                 terraform init
                 terraform validate
                 terraform plan -out=tfplan
+            env:
+              TF_VAR_sql_admin_password: $(sql_admin_password)
+
           - publish: '$(Build.SourcesDirectory)/terraform/tfplan'
             artifact: tfplan
             displayName: Publish Terraform Plan
@@ -66,3 +65,5 @@ stages:
                 export ARM_USE_AZUREAD=true
                 terraform init
                 terraform apply -auto-approve "$(Pipeline.Workspace)/tfplan/tfplan"
+            env:
+              TF_VAR_sql_admin_password: $(sql_admin_password)
