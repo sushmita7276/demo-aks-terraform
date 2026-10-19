@@ -2,6 +2,10 @@
 trigger:
   - main
 
+variables:
+  - name: sql_admin_password
+    value: $(sql_admin_password)
+
 pool:
   vmImage: ubuntu-latest
 
