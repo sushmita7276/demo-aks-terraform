@@ -7,15 +7,15 @@ module "resource_group" {
 }
 
 module "network" {
-    source = "./modules/network"
+  source = "./modules/network"
 
-   vnet_name = var.vnet_name
-   vnet_address_space = var.vnet_address_space
-   snetaks_subnet_name = var.snetaks_subnet_name
-   snetaks_subnet_prefix = var.snetaks_subnet_prefix
+  vnet_name             = var.vnet_name
+  vnet_address_space    = var.vnet_address_space
+  snetaks_subnet_name   = var.snetaks_subnet_name
+  snetaks_subnet_prefix = var.snetaks_subnet_prefix
 
-   location = module.resource_group.location
-   resource_group_name = module.resource_group.name 
+  location            = module.resource_group.location
+  resource_group_name = module.resource_group.name
 }
 
 module "aks" {
@@ -53,4 +53,23 @@ module "sql" {
 
   sku_name  = var.sku_name
   client_ip = var.client_ip
+}
+
+resource "azurerm_user_assigned_identity" "app" {
+  name                = "demo-aks-app-identity"
+  location            = module.resource_group.location
+  resource_group_name = module.resource_group.name
+}
+
+data "azurerm_client_config" "current" {}
+
+module "key_vault" {
+  source = "./modules/key-vault"
+
+  key_vault_name      = var.key_vault_name
+  location            = module.resource_group.location
+  resource_group_name = module.resource_group.name
+  tenant_id           = data.azurerm_client_config.current.tenant_id
+
+  secret_reader_principal_id = azurerm_user_assigned_identity.app.principal_id
 }

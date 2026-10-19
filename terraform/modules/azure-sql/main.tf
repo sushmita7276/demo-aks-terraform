@@ -8,9 +8,9 @@ resource "azurerm_mssql_server" "sql_server" {
 }
 
 resource "azurerm_mssql_database" "sql_database" {
-  name      = var.sql_database_name
-  server_id = azurerm_mssql_server.sql_server.id
-  sku_name  = var.sku_name
+  name        = var.sql_database_name
+  server_id   = azurerm_mssql_server.sql_server.id
+  sku_name    = var.sku_name
   max_size_gb = 2
 }
 resource "azurerm_mssql_firewall_rule" "aks_connection" {

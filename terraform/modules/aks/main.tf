@@ -7,6 +7,9 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
   role_based_access_control_enabled = true
 
+  oidc_issuer_enabled       = true
+  workload_identity_enabled = true
+
   default_node_pool {
     name           = "system"
     node_count     = var.node_count
@@ -16,6 +19,10 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
   identity {
     type = "SystemAssigned"
+  }
+
+  key_vault_secrets_provider {
+    secret_rotation_enabled = true
   }
 
   network_profile {

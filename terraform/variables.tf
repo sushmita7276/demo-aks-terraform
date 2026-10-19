@@ -11,27 +11,27 @@ variable "location" {
   default     = "westus"
 }
 variable "vnet_name" {
-    description = "Azure virtual network name"
-    type = string
-    default = "demo_aks_vnet"
+  description = "Azure virtual network name"
+  type        = string
+  default     = "demo_aks_vnet"
 }
 
 variable "vnet_address_space" {
-    description = "vnet address space"
-    type = list(string)
-    default = ["172.16.0.0/16"]
+  description = "vnet address space"
+  type        = list(string)
+  default     = ["172.16.0.0/16"]
 }
 
 variable "snetaks_subnet_name" {
-    description = "aks subnet name"
-    type = string
-    default = "demo_aks_snet"
+  description = "aks subnet name"
+  type        = string
+  default     = "demo_aks_snet"
 }
 
 variable "snetaks_subnet_prefix" {
-    description = "aks subnet prefix"
-    type = list(string)
-    default = ["172.16.1.0/24"]
+  description = "aks subnet prefix"
+  type        = list(string)
+  default     = ["172.16.1.0/24"]
 }
 
 
@@ -93,3 +93,15 @@ variable "client_ip" {
   type    = string
   default = "20.253.204.46"
 }
+variable "key_vault_name" {
+  description = "Globally unique Azure Key Vault name"
+  type        = string
+  default     = "demoaks-kv-2026"
+}
+
+
+
+
+
+
+
