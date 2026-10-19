@@ -30,5 +30,5 @@ variable "sku_name" {
 
 variable "client_ip" {
   type    = string
-  default = ""20.253.204.46""
+  default = ""
 }
