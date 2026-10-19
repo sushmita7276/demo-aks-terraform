@@ -41,12 +41,16 @@ module "acr" {
   resource_group_name = var.resource_group_name
 }
 module "sql" {
-  source = "./modules/sql"
+  source = "./modules/azure-sql"
 
-  resource_group_name = var.resource_group_name
-  location            = var.location
   sql_server_name     = var.sql_server_name
   sql_database_name   = var.sql_database_name
-  admin_username      = var.admin_username
-  admin_password      = var.admin_password
+  resource_group_name = module.resource_group.name
+  location            = module.resource_group.location
+
+  sql_admin_username = var.sql_admin_username
+  sql_admin_password = var.sql_admin_password
+
+  sku_name  = var.sku_name
+  client_ip = var.client_ip
 }

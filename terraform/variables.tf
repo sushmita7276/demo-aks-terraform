@@ -75,11 +75,21 @@ variable "sql_database_name" {
   default = "demoappdb"
 }
 
-variable "admin_username" {
+variable "sql_admin_username" {
+  type    = string
   default = "sqladminuser"
 }
 
-variable "admin_password" {
+variable "sql_admin_password" {
   type      = string
   sensitive = true
+}
+variable "sku_name" {
+  type    = string
+  default = "Basic"
+}
+
+variable "client_ip" {
+  type    = string
+  default = ""
 }
