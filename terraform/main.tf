@@ -73,3 +73,15 @@ module "key_vault" {
 
   secret_reader_principal_id = azurerm_user_assigned_identity.app.principal_id
 }
+
+resource "azurerm_federated_identity_credential" "aks_workload" {
+  name                = "demo-aks-workload-federation"
+  resource_group_name = module.resource_group.name
+  parent_id           = azurerm_user_assigned_identity.app.id
+
+  audience = ["api://AzureADTokenExchange"]
+
+  issuer = "https://westus.oic.prod-aks.azure.com/9e19c113-9fbf-4030-b93e-10fc81bd1965/be51caaf-cb06-4ef5-8d1c-13823a57a0aa/"
+
+  subject = "system:serviceaccount:default:python-app-sa"
+}
